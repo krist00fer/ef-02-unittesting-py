@@ -8,6 +8,25 @@ def test_push():
     calc.push(0)
 
 
+@pytest.mark.parametrize("i, j, k, r",
+                         [(1, 2, 3, 3),
+                          (-1, -2, -3, -3),
+                          (-1, 0, 1, 1)])
+def test_push_multiple(i, j, k, r):
+    calc = RpnCalculator()
+
+    calc.push(i, j, k)
+
+    v = calc.result()
+    assert v == r
+
+
+def test_push_no_values():
+    calc = RpnCalculator()
+
+    calc.push()
+
+
 @pytest.mark.parametrize("i, r",
                          [(0, 0),
                           (1, 1),
@@ -27,8 +46,7 @@ def test_pop(i, r):
                           (-1, -2, -2)])
 def test_result(i, j, r):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     v = calc.result()
 
@@ -41,8 +59,7 @@ def test_result(i, j, r):
                           (0, 1, 0, 1)])
 def test_stack(i, j, r1, r2):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     s = calc.stack()
 
@@ -51,8 +68,7 @@ def test_stack(i, j, r1, r2):
 
 def test_clear():
     calc = RpnCalculator()
-    calc.push(1)
-    calc.push(2)
+    calc.push(1, 2)
 
     assert calc.stack()
 
@@ -67,8 +83,7 @@ def test_clear():
                           (-1, 1, 0)])
 def test_add(i, j, exp):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     calc.add()
 
@@ -82,8 +97,7 @@ def test_add(i, j, exp):
                           (1, 1, 0)])
 def test_sub(i, j, expected):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     calc.sub()
 
@@ -97,8 +111,7 @@ def test_sub(i, j, expected):
                           (2, 3, 6)])
 def test_mul(i, j, expected):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     calc.mul()
 
@@ -112,8 +125,7 @@ def test_mul(i, j, expected):
                           (9, 3, 3)])
 def test_div(i, j, expected):
     calc = RpnCalculator()
-    calc.push(i)
-    calc.push(j)
+    calc.push(i, j)
 
     calc.div()
 

@@ -4,8 +4,9 @@ class RpnCalculator:
     def __init__(self):
         self.values = []
 
-    def push(self, value):
-        self.values.append(value)
+    def push(self, *args):
+        for arg in args:
+            self.values.append(arg)
 
     def pop(self):
         return self.values.pop()
