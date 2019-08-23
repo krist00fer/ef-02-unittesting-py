@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": "/Users/kristofer/.local/share/virtualenvs/ef-02-unittesting-py-_INtfEMl/bin/python",
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.formatting.provider": "black"
+}

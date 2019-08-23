@@ -1,4 +1,6 @@
 import pytest
+
+from assertpy import assert_that
 from rpn_calculator import RpnCalculator
 
 
@@ -8,17 +10,17 @@ def test_push():
     calc.push(0)
 
 
-@pytest.mark.parametrize("i, j, k, r",
-                         [(1, 2, 3, 3),
-                          (-1, -2, -3, -3),
-                          (-1, 0, 1, 1)])
-def test_push_multiple(i, j, k, r):
+@pytest.mark.parametrize(
+    "i, j, k, expected", [(1, 2, 3, 3), (-1, -2, -3, -3), (-1, 0, 1, 1)]
+)
+def test_push_multiple(i, j, k, expected):
     calc = RpnCalculator()
 
     calc.push(i, j, k)
 
     v = calc.result()
-    assert v == r
+
+    assert_that(v).is_equal_to(expected)
 
 
 def test_push_no_values():
@@ -27,121 +29,99 @@ def test_push_no_values():
     calc.push()
 
 
-@pytest.mark.parametrize("i, r",
-                         [(0, 0),
-                          (1, 1),
-                          (-1, -1)])
-def test_pop(i, r):
+@pytest.mark.parametrize("i, expected", [(0, 0), (1, 1), (-1, -1)])
+def test_pop(i, expected):
     calc = RpnCalculator()
     calc.push(i)
 
     v = calc.pop()
 
-    assert v == r
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, j, r",
-                         [(0, 1, 1),
-                          (3, 2, 2),
-                          (-1, -2, -2)])
-def test_result(i, j, r):
+@pytest.mark.parametrize("i, j, expected", [(0, 1, 1), (3, 2, 2), (-1, -2, -2)])
+def test_result(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
     v = calc.result()
 
-    assert v == r
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, j, r1, r2",
-                         [(1, 2, 1, 2),
-                          (-1, 1, -1, 1),
-                          (0, 1, 0, 1)])
-def test_stack(i, j, r1, r2):
+@pytest.mark.parametrize(
+    "i, j, expected", [(1, 2, [1, 2]), (-1, 1, [-1, 1]), (0, 1, [0, 1])]
+)
+def test_stack(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
-    s = calc.stack()
+    stack = calc.stack()
 
-    assert s == [r1, r2]
+    assert_that(stack).is_equal_to(expected)
 
 
 def test_clear():
     calc = RpnCalculator()
     calc.push(1, 2)
 
-    assert calc.stack()
+    assert_that(calc.stack()).is_not_empty()
 
     calc.clear()
 
-    assert not calc.stack()
+    assert_that(calc.stack()).is_empty()
 
 
-@pytest.mark.parametrize("i, j, exp",
-                         [(1, 2, 3),
-                          (0, 1, 1),
-                          (-1, 1, 0)])
-def test_add(i, j, exp):
+@pytest.mark.parametrize("i, j, expected", [(1, 2, 3), (0, 1, 1), (-1, 1, 0)])
+def test_add(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
     calc.add()
 
-    r = calc.result()
-    assert r == exp
+    v = calc.result()
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, j, expected",
-                         [(3, 2, 1),
-                          (0, 1, -1),
-                          (1, 1, 0)])
+@pytest.mark.parametrize("i, j, expected", [(3, 2, 1), (0, 1, -1), (1, 1, 0)])
 def test_sub(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
     calc.sub()
 
-    r = calc.result()
-    assert r == expected
+    v = calc.result()
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, j, expected",
-                         [(1, 2, 2),
-                          (-1, 2, -2),
-                          (2, 3, 6)])
+@pytest.mark.parametrize("i, j, expected", [(1, 2, 2), (-1, 2, -2), (2, 3, 6)])
 def test_mul(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
     calc.mul()
 
-    r = calc.result()
-    assert r == expected
+    v = calc.result()
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, j, expected",
-                         [(6, 3, 2),
-                          (-10, 5, -2),
-                          (9, 3, 3)])
+@pytest.mark.parametrize("i, j, expected", [(6, 3, 2), (-10, 5, -2), (9, 3, 3)])
 def test_div(i, j, expected):
     calc = RpnCalculator()
     calc.push(i, j)
 
     calc.div()
 
-    r = calc.result()
-    assert r == expected
+    v = calc.result()
+    assert_that(v).is_equal_to(expected)
 
 
-@pytest.mark.parametrize("i, expected",
-                         [(100, 10),
-                          (9, 3),
-                          (64, 8)])
+@pytest.mark.parametrize("i, expected", [(100, 10), (9, 3), (64, 8)])
 def test_sqrt(i, expected):
     calc = RpnCalculator()
     calc.push(i)
 
     calc.sqrt()
 
-    r = calc.result()
-    assert r == expected
+    v = calc.result()
+    assert_that(v).is_equal_to(expected)

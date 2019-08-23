@@ -1,5 +1,6 @@
 import math
 
+
 class RpnCalculator:
     def __init__(self):
         self.values = []
@@ -35,7 +36,7 @@ class RpnCalculator:
     def mul(self):
         i = self.values.pop()
         j = self.values.pop()
-        r = i*j
+        r = i * j
         self.values.append(r)
 
     def div(self):
